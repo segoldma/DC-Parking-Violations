@@ -3,6 +3,7 @@ library(readr)
 library(purrr)
 library(lubridate)
 library(ggplot2)
+library(tidytext)
 
 nov2017 <- read_csv("Parking_Violations_Issued_in_November_2017.csv")
 dec2017 <- read_csv("Parking_Violations_Issued_in_December_2017.csv")
