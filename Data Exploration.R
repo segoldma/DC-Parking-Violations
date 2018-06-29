@@ -76,7 +76,7 @@ violations %>%
   slice(1:3) %>% 
   ungroup()
 
-# Top Violations by Day on My Block
+# Top Violations by Day on 1400 BLOCK FLORIDA NW
 violations %>% 
   filter(str_detect(LOCATION, "1400 BLOCK FLORIDA AVE NW")) %>% 
   mutate("day_of_week" = case_when(wday(TICKET_ISSUE_DATE) == 1 ~ "Sunday",
@@ -93,7 +93,7 @@ violations %>%
   slice(1:3) %>% 
   ungroup()
 
-# Top Violations on the Block I usually Park
+# Top Violations on 1500 Block W ST NW
 violations %>% 
   filter(str_detect(LOCATION, "1500 BLOCK W ST NW")) %>% 
   mutate("day_of_week" = case_when(wday(TICKET_ISSUE_DATE) == 1 ~ "Sunday",
