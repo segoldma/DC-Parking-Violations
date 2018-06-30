@@ -110,6 +110,25 @@ violations %>%
   slice(1:3) %>% 
   ungroup()
 
+# Top Violations on 15TH ST NW East of the Park
+violations %>% 
+  filter(str_detect(LOCATION, "2300 BLOCK 15TH ST NW")) %>% 
+  mutate("day_of_week" = case_when(wday(TICKET_ISSUE_DATE) == 1 ~ "Sunday",
+                                   wday(TICKET_ISSUE_DATE) == 2 ~ "Monday",
+                                   wday(TICKET_ISSUE_DATE) == 3 ~ "Tuesday",
+                                   wday(TICKET_ISSUE_DATE) == 4 ~ "Wednesday",
+                                   wday(TICKET_ISSUE_DATE) == 5 ~ "Thursday",
+                                   wday(TICKET_ISSUE_DATE) == 6 ~ "Friday",
+                                   wday(TICKET_ISSUE_DATE) == 7 ~ "Saturday")) %>% 
+  group_by(day_of_week, VIOLATION_DESCRIPTION) %>% 
+  summarise("Violations" = n()) %>% 
+  arrange(desc(Violations)) %>% 
+  group_by(day_of_week) %>% 
+  slice(1:3) %>% 
+  ungroup()
+
+
+
 data %>% 
   filter(is.na(VIOLATION_DESCRIPTION)) %>% View()
 
