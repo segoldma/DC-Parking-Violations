@@ -20,6 +20,8 @@ rm(list = c("nov2017", "dec2017", "jan2018", "feb2018", "mar2018", "apr2018", "m
 
 # Explore the fields
 str(violations)
+summary(violations)
+skim(violations)
 
 # Top 10 Violations
 violations %>% 
@@ -34,6 +36,30 @@ violations %>%
   rename("Month" = `month(TICKET_ISSUE_DATE)`) %>% 
   mutate("Month" = month.abb[Month]) %>% 
   arrange(desc(Violations)) 
+
+# Top 10 Violation Locations
+violations %>% 
+  group_by(LOCATION) %>% 
+  summarise("Violations" = n()) %>% 
+  arrange(desc(Violations)) %>% 
+  top_n(10)
+
+# Top 10 Violation Locations on Saturdays
+violations %>% 
+  filter(wday(TICKET_ISSUE_DATE) == 7) %>% 
+  group_by(LOCATION) %>% 
+  summarise("Violations" = n()) %>% 
+  arrange(desc(Violations)) %>% 
+  top_n(10)
+
+
+# Top 10 Violation Lociations on Sundays
+violations %>% 
+  filter(wday(TICKET_ISSUE_DATE) == 1) %>% 
+  group_by(LOCATION) %>% 
+  summarise("Violations" = n()) %>% 
+  arrange(desc(Violations)) %>% 
+  top_n(10)
 
 # Top 3 Violations by Month
 violations %>% 
@@ -127,6 +153,7 @@ violations %>%
   slice(1:3) %>% 
   ungroup()
 
+violations %>% group_by(BODY_STYLE) %>% tally()
 
 
 data %>% 
@@ -146,9 +173,23 @@ data <- data %>%
                                    wday(TICKET_ISSUE_DATE) == 6 ~ "Friday",
                                    wday(TICKET_ISSUE_DATE) == 7 ~ "Saturday"))
 
-data %>% 
-  group_by(day_of_week) %>% 
-  tally()
+
+# Top 10 Violations by DC License Plates
+violations %>% 
+  filter(RP_PLATE_STATE == "DC") %>% 
+  group_by(VIOLATION_DESCRIPTION) %>% 
+  summarise("Violations" = n()) %>% 
+  arrange(desc(Violations)) %>% 
+  top_n(10, wt = Violations)
+
+# Top 10 Violations by non-DC Plates
+violations %>% 
+  filter(!RP_PLATE_STATE == "DC") %>% 
+  group_by(VIOLATION_DESCRIPTION) %>% 
+  summarise("Violations" = n()) %>% 
+  arrange(desc(Violations)) %>% 
+  top_n(10, wt = Violations)
+
 
 data %>% filter(!is.na(LOCATION)) %>% select(LOCATION) %>% View()
 
